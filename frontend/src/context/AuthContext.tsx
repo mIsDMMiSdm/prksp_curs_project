@@ -1,4 +1,4 @@
-import {
+﻿import {
   createContext,
   useCallback,
   useContext,
@@ -10,13 +10,14 @@ import {
 
 import * as authApi from "../api/auth";
 import { getAccessToken } from "../api/client";
-import type { User } from "../types";
+import type { RegisterPayload, User } from "../types";
 
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
+  register: (payload: RegisterPayload) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -57,6 +58,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [refreshUser],
   );
 
+  const register = useCallback(
+    async (payload: RegisterPayload) => {
+      await authApi.register(payload);
+      await authApi.login(payload.username, payload.password);
+      await refreshUser();
+    },
+    [refreshUser],
+  );
+
   const logout = useCallback(() => {
     authApi.logout();
     setUser(null);
@@ -68,10 +78,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loading,
       isAuthenticated: Boolean(user),
       login,
+      register,
       logout,
       refreshUser,
     }),
-    [user, loading, login, logout, refreshUser],
+    [user, loading, login, register, logout, refreshUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -84,3 +95,4 @@ export function useAuth(): AuthContextValue {
   }
   return ctx;
 }
+

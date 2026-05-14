@@ -1,30 +1,48 @@
-import { Link, Outlet } from "react-router-dom";
+﻿import { NavLink, Outlet } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
+import { getNavItemsForRole } from "../utils/navigation";
 
 export function Layout() {
   const { user, logout } = useAuth();
+  const navItems = user ? getNavItemsForRole(user.role) : [];
 
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <Link to="/" className="logo">
-          Склад и заказы
-        </Link>
-        {user && (
-          <div className="header-meta">
-            <span>
-              {user.username} · {user.role_display}
-            </span>
-            <button type="button" className="btn-secondary" onClick={logout}>
-              Выйти
-            </button>
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <span className="brand-mark">WMS</span>
+          <span className="brand-text">Склад и заказы</span>
+        </div>
+        <nav className="sidebar-nav">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          <div className="user-chip">
+            <span className="user-name">{user?.username}</span>
+            <span className="user-role">{user?.role_display}</span>
           </div>
-        )}
-      </header>
-      <main className="app-main">
-        <Outlet />
-      </main>
+          <button type="button" className="btn-ghost" onClick={logout}>
+            Выйти
+          </button>
+        </div>
+      </aside>
+      <div className="app-content">
+        <main className="app-main">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }
