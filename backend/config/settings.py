@@ -23,6 +23,14 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+_railway_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN", "").strip()
+if _railway_domain:
+    ALLOWED_HOSTS.append(_railway_domain)
+
+if os.getenv("RAILWAY_DEPLOY") == "1":
+    ALLOWED_HOSTS.append(".railway.app")
+    ALLOWED_HOSTS.append(".up.railway.app")
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -67,26 +75,39 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-_use_postgres = os.getenv("USE_POSTGRES", "0") == "1"
+_database_url = os.getenv("DATABASE_URL", "").strip()
 
-if _use_postgres:
+if _database_url:
+    import dj_database_url
+
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "warehouse_orders"),
-            "USER": os.getenv("POSTGRES_USER", "postgres"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
-            "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-            "PORT": os.getenv("POSTGRES_PORT", "5432"),
-        }
+        "default": dj_database_url.config(
+            default=_database_url,
+            conn_max_age=600,
+            ssl_require=os.getenv("DATABASE_SSL_REQUIRE", "1") == "1",
+        )
     }
 else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+    _use_postgres = os.getenv("USE_POSTGRES", "0") == "1"
+
+    if _use_postgres:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": os.getenv("POSTGRES_DB", "warehouse_orders"),
+                "USER": os.getenv("POSTGRES_USER", "postgres"),
+                "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
+                "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+                "PORT": os.getenv("POSTGRES_PORT", "5432"),
+            }
         }
-    }
+    else:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+            }
+        }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -138,3 +159,16 @@ CORS_ALLOWED_ORIGINS = [
     origin.strip() for origin in _cors_origins.split(",") if origin.strip()
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+if os.getenv("RAILWAY_DEPLOY") == "1":
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://[\w-]+\.up\.railway\.app$",
+        r"^https://[\w-]+\.railway\.app$",
+    ]
+
+_frontend_url = os.getenv("FRONTEND_URL", "").strip()
+if _frontend_url and _frontend_url not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.append(_frontend_url)
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

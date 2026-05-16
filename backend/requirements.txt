@@ -4,3 +4,5 @@ djangorestframework-simplejwt>=5.3,<6
 django-cors-headers>=4.3,<5
 python-dotenv>=1.0,<2
 psycopg2-binary>=2.9,<3
+gunicorn>=22.0,<24
+dj-database-url>=2.1,<3
