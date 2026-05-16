@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000";
+/** Пустая строка — запросы на тот же origin (nginx proxy в Docker prod). */
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 const ACCESS_KEY = "access_token";
 const REFRESH_KEY = "refresh_token";
