@@ -11,7 +11,7 @@ export function RoleRoute({ roles }: RoleRouteProps) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <p className="page-loading">Р—Р°РіСЂСѓР·РєР°вЂ¦</p>;
+    return <p className="page-loading">Загрузка…</p>;
   }
 
   if (!user || !roles.includes(user.role)) {

@@ -21,7 +21,7 @@ export function LoginPage() {
       navigate("/", { replace: true });
     } catch (err) {
       setError(
-        err instanceof ApiError ? err.message : "РќРµ СѓРґР°Р»РѕСЃСЊ РІРѕР№С‚Рё РІ СЃРёСЃС‚РµРјСѓ",
+        err instanceof ApiError ? err.message : "Не удалось войти в систему",
       );
     } finally {
       setSubmitting(false);
@@ -30,12 +30,12 @@ export function LoginPage() {
 
   return (
     <section className="card card-narrow">
-      <h1>Р’С…РѕРґ</h1>
-      <p className="muted">РЎРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРєР»Р°РґРѕРј Рё Р·Р°РєР°Р·Р°РјРё</p>
+      <h1>Вход</h1>
+      <p className="muted">Система управления складом и заказами</p>
 
       <form className="form" onSubmit={handleSubmit}>
         <label className="field">
-          <span>Р›РѕРіРёРЅ</span>
+          <span>Логин</span>
           <input
             type="text"
             autoComplete="username"
@@ -45,7 +45,7 @@ export function LoginPage() {
           />
         </label>
         <label className="field">
-          <span>РџР°СЂРѕР»СЊ</span>
+          <span>Пароль</span>
           <input
             type="password"
             autoComplete="current-password"
@@ -56,18 +56,17 @@ export function LoginPage() {
         </label>
         {error && <p className="form-error">{error}</p>}
         <button type="submit" className="btn-primary" disabled={submitting}>
-          {submitting ? "Р’С…РѕРґвЂ¦" : "Р’РѕР№С‚Рё"}
+          {submitting ? "Вход…" : "Войти"}
         </button>
       </form>
 
       <p className="demo-hint muted">
-        Р”РµРјРѕ: <code>warehouse1</code>, <code>logistic1</code>, <code>employee1</code>{" "}
-        / РїР°СЂРѕР»СЊ <code>demo12345</code>
+        Демо: <code>warehouse1</code>, <code>logistic1</code>, <code>employee1</code>{" "}
+        / пароль <code>demo12345</code>
       </p>
       <p className="form-footer">
-        <Link to="/register">РќРµС‚ Р°РєРєР°СѓРЅС‚Р°? Р РµРіРёСЃС‚СЂР°С†РёСЏ</Link>
+        <Link to="/register">Нет аккаунта? Регистрация</Link>
       </p>
     </section>
   );
 }
-

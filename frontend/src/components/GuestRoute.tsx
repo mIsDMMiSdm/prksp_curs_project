@@ -8,7 +8,7 @@ export function GuestRoute() {
   if (loading) {
     return (
       <div className="auth-page">
-        <p className="muted">Р—Р°РіСЂСѓР·РєР°вЂ¦</p>
+        <p className="muted">Загрузка…</p>
       </div>
     );
   }

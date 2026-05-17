@@ -22,7 +22,7 @@ export function RegisterPage() {
     setError(null);
 
     if (password !== passwordConfirm) {
-      setError("РџР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚");
+      setError("Пароли не совпадают");
       return;
     }
 
@@ -40,7 +40,7 @@ export function RegisterPage() {
       setError(
         err instanceof ApiError
           ? err.message
-          : "РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ",
+          : "Не удалось зарегистрироваться",
       );
     } finally {
       setSubmitting(false);
@@ -49,12 +49,12 @@ export function RegisterPage() {
 
   return (
     <section className="card card-narrow">
-      <h1>Р РµРіРёСЃС‚СЂР°С†РёСЏ</h1>
-      <p className="muted">Р’С‹Р±РµСЂРёС‚Рµ СЂРѕР»СЊ РґР»СЏ СѓС‡РµР±РЅРѕРіРѕ СЃС‚РµРЅРґР°</p>
+      <h1>Регистрация</h1>
+      <p className="muted">Выберите роль для учебного стенда</p>
 
       <form className="form" onSubmit={handleSubmit}>
         <label className="field">
-          <span>Р›РѕРіРёРЅ</span>
+          <span>Логин</span>
           <input
             type="text"
             autoComplete="username"
@@ -64,7 +64,7 @@ export function RegisterPage() {
           />
         </label>
         <label className="field">
-          <span>Email (РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅРѕ)</span>
+          <span>Email (необязательно)</span>
           <input
             type="email"
             autoComplete="email"
@@ -73,7 +73,7 @@ export function RegisterPage() {
           />
         </label>
         <label className="field">
-          <span>Р РѕР»СЊ</span>
+          <span>Роль</span>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value as UserRole)}
@@ -87,7 +87,7 @@ export function RegisterPage() {
           </select>
         </label>
         <label className="field">
-          <span>РџР°СЂРѕР»СЊ</span>
+          <span>Пароль</span>
           <input
             type="password"
             autoComplete="new-password"
@@ -98,7 +98,7 @@ export function RegisterPage() {
           />
         </label>
         <label className="field">
-          <span>РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РїР°СЂРѕР»СЏ</span>
+          <span>Подтверждение пароля</span>
           <input
             type="password"
             autoComplete="new-password"
@@ -110,14 +110,13 @@ export function RegisterPage() {
         </label>
         {error && <p className="form-error">{error}</p>}
         <button type="submit" className="btn-primary" disabled={submitting}>
-          {submitting ? "Р РµРіРёСЃС‚СЂР°С†РёСЏвЂ¦" : "Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ"}
+          {submitting ? "Регистрация…" : "Зарегистрироваться"}
         </button>
       </form>
 
       <p className="form-footer">
-        <Link to="/login">РЈР¶Рµ РµСЃС‚СЊ Р°РєРєР°СѓРЅС‚? Р’РѕР№С‚Рё</Link>
+        <Link to="/login">Уже есть аккаунт? Войти</Link>
       </p>
     </section>
   );
 }
-

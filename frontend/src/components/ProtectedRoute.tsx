@@ -6,7 +6,7 @@ export function ProtectedRoute() {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <p className="muted">Р—Р°РіСЂСѓР·РєР°вЂ¦</p>;
+    return <p className="muted">Загрузка…</p>;
   }
 
   if (!isAuthenticated) {
