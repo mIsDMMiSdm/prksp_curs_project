@@ -1,0 +1,7 @@
+# Конфигурация Schemathesis (справочно).
+# Хуки задаются через SCHEMATHESIS_HOOKS=fuzzing.hooks (см. scripts/run-fuzzing.*).
+
+base-url = "http://127.0.0.1:8000"
+hypothesis-max-examples = 50
+workers = 1
+request-timeout = 10
